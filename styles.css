@@ -106,6 +106,7 @@ section {
 @media (max-width: 600px) {
     .gallery-images {
         grid-template-columns: repeat(2, 1fr); /* Two images per row */
+        padding: 0 10px;
     }
 }
 
