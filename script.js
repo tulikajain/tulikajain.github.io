@@ -284,7 +284,7 @@ const defaultImages = [
 
 // === AI FETCH LOGIC ===
 async function fetchHighlights(prompt) {
-  const response = await fetch('http://localhost:3000/api/generate', {
+  const response = await fetch('https://tulikajain-github-io.onrender.com', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
