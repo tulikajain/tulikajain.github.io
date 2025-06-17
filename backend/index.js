@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { GEMINI_API_KEY, CHATGPT_API_KEY } = require('./api');
+const { GEMINI_API_KEY, CHATGPT_API_KEY, ELEVENLABS_API_KEY, ELEVENLABS_VOICE_ID } = require('./api');
 
 const app = express();
 app.use(cors());
@@ -49,6 +49,31 @@ app.post('/api/generate', async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/tts', async (req, res) => {
+  const { text } = req.body;
+  try {
+    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`, {
+      method: 'POST',
+      headers: {
+        'xi-api-key': ELEVENLABS_API_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        text,
+        model_id: "eleven_multilingual_v2",
+        voice_settings: { stability: 0.5, similarity_boost: 0.5 }
+      })
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch audio from ElevenLabs');
+    }
+    res.set('Content-Type', 'audio/mpeg');
+    response.body.pipe(res);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 

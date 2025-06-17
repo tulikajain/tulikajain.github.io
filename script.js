@@ -229,7 +229,7 @@ Each highlight should be:
 - Talk in chronological order when relevant
 - Suitable for HR or Product Manager audiences
 
-Example format and tone of voice:
+Example format and tone of voice (do not copy):
 Mastered the code at UC Berkeley - Computer Science degree unlocked!,
 Stormed the fashion capital as Louis Vuitton's IoT Product Manager,
 Co-founded a venture-backed startup bridging luxury brands with the NFT frontier,
@@ -379,6 +379,7 @@ async function showComicPanels(highlights) {
     panelsContainer.appendChild(panel);
     // Animate in
     setTimeout(() => panel.classList.add("visible"), 100);
+    await playTTS(highlights[i]);
   }
 }
 
@@ -420,3 +421,19 @@ form.addEventListener("submit", async (e) => {
 window.addEventListener("DOMContentLoaded", () => {
   generatePanels(HIGHLIGHT_PROMPT);
 });
+
+async function playTTS(text) {
+  const response = await fetch('https://tulikajain-github-io.onrender.com/api/tts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text })
+  });
+  if (!response.ok) {
+    throw new Error('TTS API error');
+  }
+  const audioData = await response.arrayBuffer();
+  const audioBlob = new Blob([audioData], { type: 'audio/mpeg' });
+  const audioUrl = URL.createObjectURL(audioBlob);
+  const audio = new Audio(audioUrl);
+  audio.play();
+}
