@@ -379,7 +379,7 @@ async function showComicPanels(highlights) {
     panelsContainer.appendChild(panel);
     // Animate in
     setTimeout(() => panel.classList.add("visible"), 100);
-    await playTTS(highlights[i]);
+    // await playTTS(highlights[i]); // Voice feature commented out
   }
 }
 
@@ -419,7 +419,11 @@ form.addEventListener("submit", async (e) => {
 
 // === INITIAL LOAD ===
 window.addEventListener("DOMContentLoaded", () => {
-  generatePanels(HIGHLIGHT_PROMPT);
+  // document.getElementById('start-btn').addEventListener('click', () => {
+  //   document.getElementById('start-btn').style.display = 'none';
+  //   generatePanels(HIGHLIGHT_PROMPT);
+  // });
+  generatePanels(HIGHLIGHT_PROMPT); // Directly start comic panels
 });
 
 async function playTTS(text) {
