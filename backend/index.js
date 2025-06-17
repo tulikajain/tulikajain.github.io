@@ -72,8 +72,9 @@ app.post('/api/tts', async (req, res) => {
       console.error('ElevenLabs API error:', response.status, errorText);
       throw new Error('Failed to fetch audio from ElevenLabs: ' + errorText);
     }
+    const audioBuffer = await response.arrayBuffer();
     res.set('Content-Type', 'audio/mpeg');
-    response.body.pipe(res);
+    res.send(Buffer.from(audioBuffer));
   } catch (err) {
     console.error('TTS endpoint error:', err);
     res.status(500).json({ error: err.message });
