@@ -68,11 +68,14 @@ app.post('/api/tts', async (req, res) => {
       })
     });
     if (!response.ok) {
-      throw new Error('Failed to fetch audio from ElevenLabs');
+      const errorText = await response.text();
+      console.error('ElevenLabs API error:', response.status, errorText);
+      throw new Error('Failed to fetch audio from ElevenLabs: ' + errorText);
     }
     res.set('Content-Type', 'audio/mpeg');
     response.body.pipe(res);
   } catch (err) {
+    console.error('TTS endpoint error:', err);
     res.status(500).json({ error: err.message });
   }
 });
