@@ -47,6 +47,13 @@ nav {
     font-weight: 400;
 }
 
+.logo img, .logo svg {
+    height: 40px; /* adjust as needed */
+    width: auto;
+    display: block;
+}
+
+
 /* Hero Section */
 .hero {
     position: relative; /* Allows for layering */
@@ -339,9 +346,12 @@ footer {
 
 .footer-column {
     display: flex;
-    flex: 1 1 40%; /* Adjust the basis and flexibility of the column container */
-    justify-content: space-between; /* Space between location and hours */
+    flex: 1 1 100%;
+    gap: 40px; /* spacing between the two sections */
+    justify-content: center; /* center both sections horizontally */
+    align-items: flex-start; /* align their tops */
 }
+
 
 .footer-section {
     margin: 0 20px; /* Margins for inner sections */
@@ -507,4 +517,10 @@ html, body {
     max-width: 100%;
     margin: 0;
     padding: 0;
+}
+
+.footer-column-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
