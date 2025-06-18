@@ -14,21 +14,18 @@
         <nav>
             <div class="logo">
                 <img src="assets/logo.svg" alt="My Kitchen Logo" />
-                </svg>
             </div>
-                <div class="burger">
+            <div class="burger">
                 <div class="line1"></div>
                 <div class="line2"></div>
                 <div class="line3"></div>
             </div>
             <ul class="nav-links">
-                <!-- <li><a href="#home">Home</a></li> -->
                 <li><a href="#about">About</a></li>
                 <li><a href="#menu">Menu</a></li>
                 <li><a href="#reservations">Reservations</a></li>
                 <li><a href="#delivery">Delivery</a></li>
-                <!-- <li><a href="#gallery">Gallery</a></li> -->
-                <!-- <li><a href="#contact">Contact</a></li> -->
+                <li><a href="#" onclick="switchToFrench(); return false;">FR</a></li>
             </ul>
         </nav>
     </header>
@@ -38,7 +35,6 @@
         <div class="hero-content">
             <h1>AUTHENTIC COMFORT FOOD</h1>
             <p>Organic & Fresh, just like Home</p>
-            <!-- <button>Order Now</button> -->
         </div>
     </section>
 
@@ -84,12 +80,7 @@
                     Make a Reservation
                 </a>
             </div>            
-            <!-- <div class="cta-buttons">
-                <a href="tel:+1234567890" class="button phone">Call Us</a>
-                <a href="https://instagram.com/yourprofile" class="button instagram" target="_blank">Instagram</a>
-                <a href="https://facebook.com/yourpage" class="button facebook" target="_blank">Facebook</a>
-                <a href="reservations.html" class="button reservations">Make a Reservation</a>
-            </div> -->
+
         </div>
     </section>
     
@@ -114,20 +105,6 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- <div class="footer-column">
-                <div class="footer-section location">
-                    <h3>LOCATION</h3>
-                    <p>540 North Coast Highway 101 <br> Leucadia, CA 92024</p>
-                    <p><i>760.479.0488</i></p>
-                    <p>birdseyekitchen@gmail.com</p>
-                </div>
-                <div class="footer-section hours">
-                    <h3>HOURS</h3>
-                    <p><b>Sunday - Thursday</b><br> 11:30am - 3:30pm <br> 4:30pm - 9pm</p>
-                    <p><b>Friday - Saturday</b><br> 11:30am - 3:30pm <br> 4:30pm - 10pm</p>
-                </div>
-            </div> -->
             <div class="footer-map">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10497.670524473806!2d2.325944687158203!3d48.86931459999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e3d850fffff%3A0x89a09001fcf323d2!2sBambou!5e0!3m2!1sen!2sfr!4v1726919235010!5m2!1sen!2sfr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>            </div>
         </div>
@@ -135,5 +112,34 @@
     
 
     <script src="script.js"></script>
+    <script>
+      // Language dropdown logic
+      const langBtn = document.getElementById('lang-btn');
+      const langMenu = document.getElementById('lang-menu');
+      if (langBtn && langMenu) {
+        langBtn.onclick = function(e) {
+          e.stopPropagation();
+          langMenu.style.display = langMenu.style.display === 'block' ? 'none' : 'block';
+        };
+        document.body.onclick = function() {
+          langMenu.style.display = 'none';
+        };
+      }
+      function switchToFrench() {
+        localStorage.setItem('lang', 'fr');
+        window.location.href = 'index-fr.html';
+      }
+      // Optional: Auto-detect country and redirect unless user has chosen language
+      (function() {
+        if (localStorage.getItem('lang')) return;
+        fetch('https://ipapi.co/country/')
+          .then(response => response.text())
+          .then(country => {
+            if (country.trim() === 'FR') {
+              window.location.href = 'index-fr.html';
+            }
+          });
+      })();
+    </script>
 </body>
 </html>

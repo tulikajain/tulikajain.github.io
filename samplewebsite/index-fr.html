@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Kitchen</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header and Navigation -->
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="assets/logo.svg" alt="Logo Ma Cuisine" />
+            </div>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#about">À propos</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#reservations">Réservations</a></li>
+                <li><a href="#delivery">Livraison</a></li>
+                <li><a href="#" onclick="switchToEnglish(); return false;">EN</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>CUISINE AUTHENTIQUE & FAMILIALE</h1>
+            <p>Bio & Frais, comme à la maison</p>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery">
+        <div class="gallery-images">
+            <img src="assets/item1.jpg" alt="Plat 1">
+            <img src="assets/item2.jpg" alt="Plat 2">
+            <img src="assets/item3.jpg" alt="Plat 3">
+            <img src="assets/item4.jpg" alt="Plat 4">
+            <img src="assets/item5.jpg" alt="Plat 5">
+            <img src="assets/item6.jpg" alt="Plat 6">
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <h2>Saveurs Authentiques de Thaïlande</h2>
+        <p>Chez My Kitchen, nous servons une cuisine familiale préparée avec soin et des ingrédients de qualité. Nous utilisons du poulet bio, du bœuf nourri à l'herbe, des œufs bio, du tofu bio non-OGM, et privilégions toujours les produits bio quand c'est possible.<br><br>
+        Nos soupes et ragoûts sont faits maison chaque jour à partir d'os de bœuf nourri à l'herbe et de poulets bio entiers pour des saveurs riches et authentiques.<br><br>
+        Nous sommes un restaurant familial et local — venez nous rendre visite et goûtez la cuisine de chez vous !
+        </p>
+    </section>
+
+    <div class="button-container">
+        <a href="menu.html" class="view-menu-button">VOIR LE MENU</a>
+    </div>
+
+    <section class="call-to-action">
+        <div class="cta-content">
+            <h2>REJOIGNEZ-NOUS</h2>
+            <p>Ouvert 7j/7 pour le déjeuner et le dîner.<br>Réservations possibles pour les grands groupes.</p>
+            <div class="cta-buttons">
+                <a href="https://instagram.com/yourprofile" class="button instagram" target="_blank">
+                    <i class="fab fa-instagram"></i> Suivez-nous
+                </a>
+                <a href="reservations.html" class="button reservations">
+                    Réserver une table
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column-wrapper">
+                <div class="footer-column">
+                    <div class="footer-section location">
+                        <h3>ADRESSE</h3>
+                        <p>1234 Rue de Exemple <br> Paris, France 75001</p>
+                        <p><a href="tel:+33 0664405478" class="phone-number">+33 0664405478</a></p>
+                        <p>exemple@gmail.com</p>
+                    </div>
+                    <div class="footer-section hours">
+                        <h3>HORAIRES</h3>
+                        <p><b>Dimanche - Jeudi</b><br> 11h30 - 15h30 <br> 16h30 - 21h</p>
+                        <p><b>Vendredi - Samedi</b><br> 11h30 - 15h30 <br> 16h30 - 22h</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10497.670524473806!2d2.325944687158203!3d48.86931459999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e3d850fffff%3A0x89a09001fcf323d2!2sBambou!5e0!3m2!1sen!2sfr!4v1726919235010!5m2!1sen!2sfr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+      function switchToEnglish() {
+        localStorage.setItem('lang', 'en');
+        window.location.href = 'index.html';
+      }
+      // Optional: Auto-detect country and redirect unless user has chosen language
+      (function() {
+        if (localStorage.getItem('lang')) return;
+        fetch('https://ipapi.co/country/')
+          .then(response => response.text())
+          .then(country => {
+            if (country.trim() !== 'FR') {
+              window.location.href = 'index.html';
+            }
+          });
+      })();
+    </script>
+    <script src="script.js"></script>
+</body>
+</html> 

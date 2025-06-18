@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simply Websites Studio - 500€ en 48h</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div style="position: absolute; top: 24px; right: 32px; z-index: 1000;">
+        <button onclick="switchToEnglish()" style="padding: 0.5rem 1rem; border-radius: 8px; border: none; background: #667eea; color: white; font-weight: 600; cursor: pointer;">English</button>
+    </div>
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Votre restaurant mérite un site web optimisé SEO pour seulement 500€</h1>
+                <p class="hero-description">
+                    Transformez la présence en ligne de votre restaurant et attirez de nouveaux clients avec un site professionnel qui travaille aussi dur que vous.
+                </p>
+                <div class="contact-buttons">
+                    <a href="https://calendly.com/tulikaconnect/48h-restaurant-website" class="contact-btn primary">
+                        📅 Prendre rendez-vous
+                    </a>
+                </div>
+                <div class="cta-section">
+                    <h2 class="offer-title">Solution complète de site web</h2>
+                    <div class="offer-cta-group">
+                        <a href="samplewebsite/" class="website-link">Ce modèle de site</a>
+                        <span class="price-highlight">500€</span>
+                        <strong class="offer-delivery">livré en 48 heures</strong>
+                    </div>
+                    <div class="features">
+                        <div class="feature">
+                            <h3>🎨 Personnalisation complète de la marque</h3>
+                            <p>Nous remplaçons tous les textes, liens, photos et logos pour correspondre parfaitement à l'identité de votre restaurant.</p>
+                        </div>
+                        <div class="feature" onclick="openSeoModal()">
+                            <h3>🔍 Optimisation SEO incluse</h3>
+                            <p>
+                                Optimisation professionnelle de tous les éléments SEO : balises alt des photos, méta-descriptions, apparence sur Google, et design mobile.
+                                <br>
+                                <span style="color:#667eea; font-weight: 600; cursor: pointer; text-decoration: underline;">Qu'est-ce que le SEO ?</span>
+                            </p>
+                        </div>
+                        <div class="feature">
+                            <h3>💲 Tarification simple</h3>
+                            <p>Pas de frais cachés, paiement unique. <br> Si vous n'avez pas encore de nom de domaine, il faudra en acheter un (nous pouvons vous aider !). Le coût est généralement de 10-15€ par an.</p>
+                        </div>
+                    </div>
+                    <div class="contact-buttons">
+                        <a href="https://calendly.com/tulikaconnect/48h-restaurant-website" class="contact-btn primary">
+                            📅 Prendre rendez-vous
+                        </a>
+                        <a href="mailto:your-email@domain.com" class="contact-btn secondary">
+                            ✉️ Envoyer un email
+                        </a>
+                    </div>
+                    <div class="bonus">
+                        <h3>Bonus : Pack SEO Premium <span class="price-highlight">+100€</span></h3>
+                        <div class="bonus-features">
+                            <div class="bonus-feature">📅 Mise en place complète du système de réservation</div>
+                            <div class="bonus-feature">📊 Diagnostic et optimisation de la fiche Google Business</div>
+                            <div class="bonus-feature">📱 Création et optimisation du profil Instagram pour restaurants</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="about-section" style="text-align: center; padding: 4rem 1rem; color: white;">
+        <div class="container">
+            <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;">
+                À propos de Simply Websites Studio
+            </h2>
+            <p style="max-width: 700px; margin: 0 auto 1rem; line-height: 1.6;">
+                Simply Websites Studio crée des sites web depuis plus de 10 ans, pour des clients allant du luxe à la restauration. Nous savons à quel point un site web est important pour votre activité, et nous faisons tout pour que tout se passe parfaitement.
+            </p>
+            <blockquote style="font-style: italic; font-size: 1.1rem; margin-bottom: 1rem;">
+                "J'ai adoré travailler avec ce studio... tout s'est déroulé parfaitement et ils ont vraiment compris nos besoins !"
+            </blockquote>
+            <p>
+                – <a href="https://www.le-anfore.it/" target="_blank" style="color: #ffeaa7; text-decoration: underline;">Le Anfore</a>
+            </p>
+        </div>
+    </section>
+    <div id="seo-modal" class="seo-modal">
+        <div class="seo-modal-backdrop" onclick="closeSeoModal()"></div>
+        <div class="seo-modal-content">
+            <span class="seo-close" onclick="closeSeoModal()">×</span>
+            <div class="seo-icon">📈</div>
+            <h2>Qu'est-ce que le SEO — et pourquoi c'est important</h2>
+            <p>
+                Le SEO (Search Engine Optimization) signifie simplement rendre votre site plus facile à trouver sur Google.
+                Quand quelqu'un cherche « meilleur restaurant près de chez moi », le SEO aide votre restaurant à apparaître dans les premiers résultats — au lieu d'être perdu en page 5.
+            </p>
+            <p>
+                Un site bien optimisé, c'est plus de clics, plus de visibilité, et plus de clients — sans dépenser en publicité.
+                C'est comme avoir l'enseigne de votre restaurant placée sur la rue la plus fréquentée d'internet.
+            </p>
+        </div>
+    </div>
+    <script>
+      function openSeoModal() {
+        document.getElementById('seo-modal').style.display = 'block';
+      }
+      function closeSeoModal() {
+        document.getElementById('seo-modal').style.display = 'none';
+      }
+      function switchToEnglish() {
+        localStorage.setItem('lang', 'en');
+        window.location.href = 'index.html';
+      }
+      // Auto-detect country and redirect unless user has chosen language
+      (function() {
+        if (localStorage.getItem('lang')) return;
+        fetch('https://ipapi.co/country/')
+          .then(response => response.text())
+          .then(country => {
+            if (country.trim() !== 'FR') {
+              window.location.href = 'index.html';
+            }
+          });
+      })();
+    </script>
+</body>
+</html> 
