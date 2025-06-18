@@ -526,7 +526,9 @@ html, body {
     width: 100%;
 }
 
-.phone {
-    color: inherit;       /* Inherits from surrounding text */
-    text-decoration: none; /* Removes underline */
+.phone-number {
+    color: inherit !important;
+    text-decoration: none !important;
+    font-weight: inherit !important;
+    font-size: inherit !important;
 }
