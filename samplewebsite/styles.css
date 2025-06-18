@@ -54,6 +54,7 @@ nav {
 }
 
 
+
 /* Hero Section */
 .hero {
     position: relative; /* Allows for layering */
@@ -523,4 +524,9 @@ html, body {
     display: flex;
     justify-content: center;
     width: 100%;
+}
+
+.phone {
+    color: inherit;       /* Inherits from surrounding text */
+    text-decoration: none; /* Removes underline */
 }
