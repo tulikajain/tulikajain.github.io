@@ -25,7 +25,7 @@
                 <li><a href="#menu">Menu</a></li>
                 <li><a href="#reservations">Reservations</a></li>
                 <li><a href="#delivery">Delivery</a></li>
-                <li><a href="#" onclick="switchToFrench(); return false;">FR</a></li>
+                <li><a href="#" onclick="switchToFrench(); return false;">EN</a></li>
             </ul>
         </nav>
     </header>
@@ -140,6 +140,9 @@
             }
           });
       })();
+      if (localStorage.getItem('lang') === 'fr') {
+        window.location.href = 'index-fr.html';
+      }
     </script>
 </body>
 </html>

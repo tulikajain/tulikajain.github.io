@@ -8,7 +8,7 @@
 </head>
 <body>
     <div style="position: absolute; top: 24px; right: 32px; z-index: 1000;">
-        <button onclick="switchToFrench()" style="padding: 0.5rem 1rem; border-radius: 8px; border: none; background: #667eea; color: white; font-weight: 600; cursor: pointer;">Français</button>
+        <button onclick="switchToFrench()" style="padding: 0.5rem 1rem; border-radius: 8px; border: none; background: #667eea; color: white; font-weight: 600; cursor: pointer;">English</button>
     </div>
     <div class="floating-elements">
         <div class="floating-element"></div>
@@ -34,7 +34,7 @@
                     <h2 class="offer-title">Complete Website Solution</h2>
                     
                     <div class="offer-cta-group">
-                      <a href="samplewebsite/" class="website-link">This Website Template</a> 
+                      <a href="#" class="website-link" onclick="if (localStorage.getItem('lang') === 'fr') { window.location.href = 'samplewebsite/index-fr.html'; } else { window.location.href = 'samplewebsite/index.html'; } return false;">This Website Template</a> 
                       <span class="price-highlight">€500</span>
                       <strong class="offer-delivery">delivered in 48 hours</strong>
                   </div>
