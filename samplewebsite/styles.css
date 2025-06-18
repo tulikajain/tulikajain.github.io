@@ -86,6 +86,7 @@ nav {
 }
 
 
+
 /* Adjust hero-content to stack properly over the background */
 .hero-content {
     position: relative; /* Ensure it is above the pseudo-element */
