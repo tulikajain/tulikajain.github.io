@@ -15,7 +15,7 @@ header {
     top: 0;
     left: 0;
     width: 100%; /* Full width of the page */
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.0));
     padding: 10px 20px;
     color: #fff;
     z-index: 1000; /* Ensure it stays on top of the hero image */
@@ -348,10 +348,12 @@ footer {
 
 .footer-column {
     display: flex;
+    flex-direction: column;
     flex: 1 1 100%;
-    gap: 40px; /* spacing between the two sections */
-    justify-content: center; /* center both sections horizontally */
-    align-items: flex-start; /* align their tops */
+    gap: 20px;
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    text-align: center; /* Ensure text is centered */
 }
 
 
@@ -532,4 +534,69 @@ html, body {
     text-decoration: none !important;
     font-weight: inherit !important;
     font-size: inherit !important;
+}
+
+/* Responsive Footer for Desktop */
+@media (min-width: 768px) {
+    footer .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center; /* Vertically align the columns */
+    }
+
+    footer .footer-column-wrapper {
+        flex: 1;
+        padding-right: 2rem;
+        display: flex;
+        justify-content: center;
+    }
+
+    footer .footer-map {
+        flex: 1;
+    }
+}
+
+/* Social Icons */
+.social-icons-desktop {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.social-icons-desktop img {
+    height: 22px; /* Adjust size as needed */
+    filter: brightness(0) invert(1); /* Makes black/colored SVG white */
+    transition: opacity 0.3s;
+}
+
+.social-icons-desktop img:hover {
+    opacity: 0.8;
+}
+
+.social-icons-mobile {
+    display: none; /* Hidden by default */
+}
+
+
+@media screen and (max-width: 768px) {
+    .social-icons-desktop {
+        display: none;
+    }
+
+    .nav-links.active .social-icons-mobile {
+        display: flex;
+        gap: 30px;
+        position: absolute;
+        bottom: 50px; /* Position at the bottom of the viewport */
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.2); /* Separator line */
+    }
+
+    .social-icons-mobile img {
+        height: 30px;
+        filter: brightness(0) invert(1);
+    }
 }
