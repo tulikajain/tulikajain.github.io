@@ -57,42 +57,62 @@ nav {
 
 /* Hero Section */
 .hero {
-    position: relative; /* Allows for layering */
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-    text-align: center;
-    font-size: 30px;
-    padding-top: 60px; /* Space for the fixed navbar */
-    overflow: hidden; /* Prevent background from moving */
-}
-
-.hero::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 100vw;
+    position: relative;
     height: 100vh;
     background: linear-gradient(
         rgba(0, 0, 0, 0.3), /* semi-transparent black overlay, adjust 0.5 to increase/decrease darkness */
         rgba(0, 0, 0, 0.3)
     ), url('assets/primarybackground.jpg') no-repeat center center/cover;    
-    background-attachment: fixed; /* Fix the background during scrolling */
-    z-index: -1; /* Place it behind other content */
-    transform: translateX(-50%);
+    /* background: url('assets/primarybackground.jpg') no-repeat center center/cover; */
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 1;
 }
 
-
-
-/* Adjust hero-content to stack properly over the background */
 .hero-content {
-    position: relative; /* Ensure it is above the pseudo-element */
-    /* background: rgba(0, 0, 0, 0.5); */
-    padding: 20px;
-    font-weight: lighter;
+    position: relative;
+    z-index: 2;
+    color: white;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    color: #fff;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.hero-content p {
+    font-size: 2.0rem;
+    margin-bottom: 1rem;
+    /* opacity: 0.9; */
+    max-width: 600px;
+    font-weight: 200;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .hero {
+        background-attachment: scroll;
+    }
+}
+
+@media (max-width: 600px) {
+    .hero h1 {
+        font-size: 1.6rem;
+        line-height: 1.15;
+    }
+    .hero-content p {
+        font-size: 1.1rem;
+    }
 }
 
 
@@ -120,8 +140,8 @@ section {
     .gallery-images {
         grid-template-columns: repeat(2, 1fr);
         padding: 0 10px;
-        padding-top: 0;
-        margin-top: 0;
+        padding-top: 0px;
+        margin-top: 30px;
     }
 
     .hero {
@@ -163,7 +183,7 @@ section {
     font-weight: 200;
     font-style: normal;
     letter-spacing: .015em;
-    font-size: 18px;
+    font-size: 16px;
     color: #737373; /* Example to adjust color, if needed */
     line-height: 1.5em;
 
@@ -358,7 +378,7 @@ footer {
 
 
 .footer-section {
-    margin: 0 20px; /* Margins for inner sections */
+    margin: 0 10px; /* Margins for inner sections */
 }
 
 .footer-map {
@@ -383,7 +403,7 @@ footer {
 
     .footer-section {
         width: 100%;
-        margin: 0 0 20px 0;
+        margin: 0 0 00px 0;
         text-align: center;
     }
 
@@ -412,7 +432,7 @@ footer {
     }
 
     .button-container {
-        padding: 20px 0;
+        padding: 10px 0;
         padding-bottom: 80px;
         padding-top: 0px;
     }
@@ -427,6 +447,7 @@ footer {
         width: 100%;
         box-sizing: border-box;
     }
+
 }
 
 /* Burger Menu */
@@ -600,3 +621,28 @@ html, body {
         filter: brightness(0) invert(1);
     }
 }
+
+.button.menu-btn {
+  /* background: #111;
+  color: #fff;
+  border: 2px solid #111;
+  transition: background 0.3s, color 0.3s; */
+  padding: 10px 20px;
+  margin: 0px;
+  color: #000;
+  background-color: transparent; /* Transparent background */
+  border: 2px solid #000; /* White border */
+  border-radius: 5px;
+  text-decoration: none;
+  display: inline-flex; /* Use flex to align icon and text */
+  align-items: center; /* Center items vertically */
+  justify-content: center; /* Center items horizontally */
+  font-size: 16px; /* Adjustable based on your design */
+  transition: background-color 0.3s, color 0.3s;
+}
+.button.menu-btn:hover {
+  background: #000;
+  color: #fff;
+  border: 2px solid #111;
+}
+
