@@ -199,7 +199,7 @@ app.delete('/api/recommendations/:id', async (req, res) => {
 app.post('/api/chat', async (req, res) => {
   const { message } = req.body;
   
-  if (!process.env.OPENAI_API_KEY) {
+  if (!process.env.CHATGPT_API_KEY) {
     // Mock response
     const response = generateMockChatResponse(message, recommendations);
     return res.json({ response });
@@ -221,7 +221,7 @@ app.post('/api/chat', async (req, res) => {
       max_tokens: 500
     }, {
       headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Authorization': `Bearer ${process.env.CHATGPT_API_KEY}`,
         'Content-Type': 'application/json'
       }
     });
