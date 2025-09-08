@@ -212,7 +212,7 @@ app.post('/api/chat', async (req, res) => {
     });
 
     const openaiResponse = await axios.post('https://api.openai.com/v1/chat/completions', {
-      model: 'gpt-5-mini-2025-08-07',
+      model: 'gpt-3.5-turbo',
       messages: [
         {
           role: 'system',
