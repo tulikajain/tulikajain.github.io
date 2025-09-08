@@ -608,16 +608,39 @@
     <script>
         // Point API calls to Render when running on GitHub Pages
         (function(){
-            const RENDER_API = 'https://tulikajain-github-io.onrender.com'; // TODO: set your Render URL
+            const RENDER_API = 'https://tulikajain-github-io.onrender.com'; // set your Render URL
+            const base = RENDER_API.replace(/\/$/, '');
             const origFetch = window.fetch.bind(window);
             window.fetch = (input, init) => {
                 try {
-                    const url = typeof input === 'string' ? input : (input && input.url) || '';
+                    let url = typeof input === 'string' ? input : (input && input.url) || '';
+                    // Only rewrite relative API calls
                     if (typeof url === 'string' && url.startsWith('/api/')) {
-                        const absolute = RENDER_API.replace(/\/$/, '') + url;
+                        const absolute = base + url;
+                        console.debug('[api->render]', url, '=>', absolute);
+                        // If a Request object was passed, clone with absolute URL
+                        if (input instanceof Request) {
+                            const reqInit = {
+                                method: input.method,
+                                headers: input.headers,
+                                body: input.body,
+                                mode: input.mode,
+                                credentials: input.credentials,
+                                cache: input.cache,
+                                redirect: input.redirect,
+                                referrer: input.referrer,
+                                referrerPolicy: input.referrerPolicy,
+                                integrity: input.integrity,
+                                keepalive: input.keepalive,
+                                signal: input.signal
+                            };
+                            return origFetch(new Request(absolute, reqInit), init);
+                        }
                         return origFetch(absolute, init);
                     }
-                } catch (_) {}
+                } catch (e) {
+                    console.warn('fetch rewrite error', e);
+                }
                 return origFetch(input, init);
             };
         })();

@@ -235,6 +235,7 @@ app.post('/api/chat', async (req, res) => {
 });
 
 function generateMockChatResponse(message, recommendations) {
+  return "I can't help you...I'm a mock response";
   const lowerMessage = message.toLowerCase();
   
   const relevantRecs = recommendations.filter(rec => 
