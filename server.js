@@ -13,6 +13,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Serve root index.html (for Render/local when index.html lives at repo root)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 // In-memory storage (replace with database later)
 let recommendations = [];
 
