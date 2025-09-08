@@ -206,12 +206,17 @@ app.post('/api/chat', async (req, res) => {
   }
   
   try {
+    const today = new Date();
+    const todayString = today.toLocaleDateString('en-US', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+
     const openaiResponse = await axios.post('https://api.openai.com/v1/chat/completions', {
-      model: 'gpt-5-mini',
+      model: 'gpt-5-mini-2025-08-07',
       messages: [
         {
           role: 'system',
-          content: `You are a helpful assistant that provides recommendations from this curated list: ${JSON.stringify(recommendations)}. Only recommend places from this list. If asked about something not in the list, politely mention that it's outside your curated recommendations.`
+          content: `Today's date is ${todayString}. You are a helpful assistant that provides recommendations from this curated list: ${JSON.stringify(recommendations)}. Only recommend places from this list. If asked about something not in the list, politely mention that it's outside your curated recommendations.`
         },
         {
           role: 'user',
@@ -236,27 +241,7 @@ app.post('/api/chat', async (req, res) => {
 
 function generateMockChatResponse(message, recommendations) {
   return "I can't help you...I'm a mock response";
-  const lowerMessage = message.toLowerCase();
-  
-  const relevantRecs = recommendations.filter(rec => 
-    lowerMessage.includes(rec.category) || 
-    lowerMessage.includes(rec.cuisine?.toLowerCase() || '') ||
-    lowerMessage.includes('dinner') && rec.category === 'restaurant' ||
-    lowerMessage.includes('drink') && rec.category === 'bar' ||
-    lowerMessage.includes('eat') && rec.category === 'restaurant'
-  );
-  
-  if (relevantRecs.length > 0) {
-    const rec = relevantRecs[0];
-    return `Based on my curated recommendations, I'd suggest **${rec.name}**! It's ${rec.cuisine ? `a ${rec.cuisine} ` : ''}${rec.category} located at ${rec.location}. ${rec.comments ? rec.comments : ''} ${rec.priceRange ? `Price range: ${rec.priceRange}` : ''}`;
-  }
-  
-  if (recommendations.length === 0) {
-    return "I don't have any recommendations in my list yet. Add some places first and then I can help you choose!";
-  }
-  
-  return "I can help you find great places from my personal recommendations! Ask me about restaurants, bars, clubs, or specific cuisines. What are you in the mood for?";
-}
+ }
 
 // Export the app for Vercel
 module.exports = app;
