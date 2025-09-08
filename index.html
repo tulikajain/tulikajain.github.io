@@ -515,7 +515,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+  <div class="container">
         <div class="header">
             <h1>My Recommendations</h1>
             <p>Curate and share your favorite places</p>
@@ -606,6 +606,22 @@
     </div>
 
     <script>
+        // Point API calls to Render when running on GitHub Pages
+        (function(){
+            const RENDER_API = 'https://tulikajain-github-io.onrender.com'; // TODO: set your Render URL
+            const origFetch = window.fetch.bind(window);
+            window.fetch = (input, init) => {
+                try {
+                    const url = typeof input === 'string' ? input : (input && input.url) || '';
+                    if (typeof url === 'string' && url.startsWith('/api/')) {
+                        const absolute = RENDER_API.replace(/\/$/, '') + url;
+                        return origFetch(absolute, init);
+                    }
+                } catch (_) {}
+                return origFetch(input, init);
+            };
+        })();
+
         // Global state
         let recommendations = [];
         let currentFilter = 'all';
@@ -918,7 +934,7 @@
                         <div class="loading-dot"></div>
                         <div class="loading-dot"></div>
                     </div>
-                </div>
+  </div>
             `;
             chatMessages.appendChild(loadingDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
