@@ -11,6 +11,9 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+// Serve assets from repo root (e.g., /styles.css)
+app.use(express.static(__dirname));
+// Continue serving additional assets from /public
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve root index.html (for Render/local when index.html lives at repo root)
@@ -201,6 +204,7 @@ app.post('/api/chat', async (req, res) => {
   
   if (!process.env.CHATGPT_API_KEY) {
     // Mock response
+    console.log('no chatgpt api key');
     const response = generateMockChatResponse(message, recommendations);
     return res.json({ response });
   }
@@ -241,7 +245,7 @@ app.post('/api/chat', async (req, res) => {
 
 function generateMockChatResponse(message, recommendations) {
   return "I can't help you...I'm a mock response";
- }
+}
 
 // Export the app for Vercel
 module.exports = app;

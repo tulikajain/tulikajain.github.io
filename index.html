@@ -1,1030 +1,481 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Recommendations</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            background: #0f0f0f;
-            color: #e4e4e7;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 20px;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-        }
-
-        .nav {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .nav-btn {
-            padding: 12px 24px;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            color: #e4e4e7;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 16px;
-        }
-
-        .nav-btn:hover, .nav-btn.active {
-            background: #333;
-            border-color: #555;
-        }
-
-        .section {
-            display: none;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        /* Add Section */
-        .add-form {
-            background: #1a1a1a;
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid #333;
-            margin-bottom: 30px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #a1a1aa;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            background: #0f0f0f;
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: #e4e4e7;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .search-results {
-            background: #0f0f0f;
-            border: 1px solid #333;
-            border-radius: 8px;
-            margin-top: 5px;
-            max-height: 300px;
-            overflow-y: auto;
-            display: none;
-        }
-
-        .search-result {
-            padding: 15px;
-            cursor: pointer;
-            border-bottom: 1px solid #333;
-            transition: background-color 0.2s;
-        }
-
-        .search-result:hover {
-            background: #1a1a1a;
-        }
-
-        .search-result:last-child {
-            border-bottom: none;
-        }
-
-        .result-name {
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
-
-        .result-address {
-            font-size: 12px;
-            color: #a1a1aa;
-            margin-bottom: 4px;
-        }
-
-        .result-info {
-            display: flex;
-            gap: 15px;
-            font-size: 11px;
-            color: #666;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: opacity 0.3s ease;
-        }
-
-        .btn:hover {
-            opacity: 0.9;
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Selected place preview */
-        .selected-place {
-            background: #0f0f0f;
-            border: 1px solid #667eea;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .selected-place.show {
-            display: block;
-        }
-
-        /* List Section */
-        .filters {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .filter-btn {
-            padding: 8px 16px;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            color: #e4e4e7;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-
-        .filter-btn:hover, .filter-btn.active {
-            background: #667eea;
-            border-color: #667eea;
-        }
-
-        .recommendations-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 20px;
-        }
-
-        .rec-card {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .rec-card:hover {
-            border-color: #555;
-            transform: translateY(-2px);
-        }
-
-        .rec-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-        }
-
-        .rec-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #e4e4e7;
-            margin-bottom: 5px;
-        }
-
-        .rec-category {
-            background: #667eea;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .rec-rating {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: #fbbf24;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .rec-details {
-            margin-bottom: 15px;
-        }
-
-        .rec-detail {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-            color: #a1a1aa;
-            font-size: 14px;
-        }
-
-        .rec-detail strong {
-            color: #e4e4e7;
-            margin-right: 8px;
-            min-width: 80px;
-        }
-
-        .rec-comments {
-            background: #0f0f0f;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
-            font-style: italic;
-            color: #d4d4d8;
-        }
-
-        .rec-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 12px;
-            background: #333;
-            color: #e4e4e7;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-small:hover {
-            background: #555;
-        }
-
-        .btn-danger {
-            background: #dc2626;
-        }
-
-        .btn-danger:hover {
-            background: #b91c1c;
-        }
-
-        /* Chat Section */
-        .chat-container {
-            max-width: 800px;
-            margin: 0 auto;
-            height: 70vh;
-            display: flex;
-            flex-direction: column;
-            background: #1a1a1a;
-            border-radius: 12px;
-            border: 1px solid #333;
-            overflow: hidden;
-        }
-
-        .chat-header {
-            padding: 20px;
-            border-bottom: 1px solid #333;
-            background: #0f0f0f;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .message {
-            display: flex;
-            gap: 12px;
-            max-width: 85%;
-        }
-
-        .message.user {
-            align-self: flex-end;
-            flex-direction: row-reverse;
-        }
-
-        .message-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-
-        .message.user .message-avatar {
-            background: #667eea;
-            color: white;
-        }
-
-        .message.assistant .message-avatar {
-            background: #333;
-            color: #e4e4e7;
-        }
-
-        .message-content {
-            background: #0f0f0f;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid #333;
-            line-height: 1.5;
-        }
-
-        .message.user .message-content {
-            background: #667eea;
-            border-color: #667eea;
-            color: white;
-        }
-
-        .chat-input-container {
-            padding: 20px;
-            border-top: 1px solid #333;
-            background: #0f0f0f;
-        }
-
-        .chat-input-wrapper {
-            display: flex;
-            gap: 12px;
-            align-items: end;
-        }
-
-        .chat-input {
-            flex: 1;
-            min-height: 44px;
-            max-height: 120px;
-            padding: 12px;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: #e4e4e7;
-            resize: none;
-            font-family: inherit;
-            font-size: 16px;
-        }
-
-        .chat-input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .chat-send-btn {
-            padding: 12px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .loading {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #a1a1aa;
-            font-style: italic;
-        }
-
-        .loading-dots {
-            display: flex;
-            gap: 4px;
-        }
-
-        .loading-dot {
-            width: 6px;
-            height: 6px;
-            background: #667eea;
-            border-radius: 50%;
-            animation: pulse 1.4s ease-in-out infinite both;
-        }
-
-        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
-        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
-
-        @keyframes pulse {
-            0%, 80%, 100% { opacity: 0.3; }
-            40% { opacity: 1; }
-        }
-
-        .share-link {
-            background: #0f0f0f;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-
-        .share-link input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            color: #667eea;
-            font-size: 14px;
-        }
-
-        .share-link input:focus {
-            outline: none;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #a1a1aa;
-        }
-
-        .empty-state h3 {
-            margin-bottom: 10px;
-            color: #e4e4e7;
-        }
-
-        @media (max-width: 768px) {
-            .recommendations-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .nav {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .filters {
-                justify-content: center;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My List</title>
+  <link rel="stylesheet" href="./public/styles.css">
 </head>
 <body>
-  <div class="container">
-        <div class="header">
-            <h1>My Recommendations</h1>
-            <p>Curate and share your favorite places</p>
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="brand">My List</div>
+  </header>
+
+  <!-- Chat is the main view -->
+  <main class="chat-page">
+    <div class="chat-container">
+      <!-- <div class="chat-header">
+        <h3>Ask about my recommendations</h3>
+        <p style="color:#a1a1aa;font-size:14px;margin-top:5px;">
+          Ask me where to go, what to eat, or any questions about my recommendations.
+        </p>
+      </div> -->
+
+      <div id="chat-messages" class="chat-messages">
+        <div class="message assistant">
+          <div class="message-avatar">AI</div>
+          <div class="message-content">
+            Hi! I can help you find recommendations from this curated list. Try “Where should I go for dinner?” or “Good bar for cocktails?”
+          </div>
         </div>
+      </div>
 
-        <div class="nav">
-            <button class="nav-btn active" onclick="showSection('add')">Add Places</button>
-            <button class="nav-btn" onclick="showSection('list')">My List (<span id="rec-count">0</span>)</button>
-            <button class="nav-btn" onclick="showSection('chat')">Chat Assistant</button>
+      <div class="chat-input-container">
+        <div class="chat-input-wrapper">
+          <!-- Left button: open list -->
+          <button id="open-list" class="icon-btn" title="Open my restaurant list" aria-label="Open my restaurant list">🍽</button>
+
+          <!-- Plus button: open add modal -->
+          <button id="open-add" class="icon-btn" title="Add a place" aria-label="Add a place">＋</button>
+
+          <!-- Text area -->
+          <textarea id="chat-input" class="chat-input" placeholder="Ask me for recommendations..." rows="1"></textarea>
+
+
+          <!-- Send -->
+          <button id="chat-send" class="chat-send-btn">Send</button>
         </div>
-
-        <!-- Add Section -->
-        <div id="add-section" class="section active">
-            <div class="add-form">
-                <h2 style="margin-bottom: 20px; text-align: center;">Add New Place</h2>
-                
-                <div class="form-group">
-                    <label for="place-search">Search for a place</label>
-                    <input type="text" id="place-search" class="form-control" placeholder="Start typing restaurant name..." required>
-                    <div id="search-results" class="search-results"></div>
-                </div>
-                
-                <div id="selected-place" class="selected-place">
-                    <h4 style="margin-bottom: 10px;">Selected Place:</h4>
-                    <div id="place-preview"></div>
-                </div>
-
-                <form id="add-form" style="display: none;">
-                    <div class="form-group">
-                        <label for="comments">Your Comments & Recommendations</label>
-                        <textarea id="comments" class="form-control" rows="4" placeholder="What makes this place special? Any dish recommendations? Best time to visit? Why do you love it?"></textarea>
-                    </div>
-
-                    <button type="submit" class="btn" style="width: 100%;">Add to My List</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- List Section -->
-        <div id="list-section" class="section">
-            <div class="filters">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="restaurant">Restaurants</button>
-                <button class="filter-btn" data-filter="bar">Bars</button>
-                <button class="filter-btn" data-filter="night_club">Clubs</button>
-                <button class="filter-btn" data-filter="cafe">Cafes</button>
-            </div>
-            
-            <div id="recommendations-container" class="recommendations-grid">
-                <!-- Recommendations will be loaded here -->
-            </div>
-            
-            <div id="empty-state" class="empty-state">
-                <h3>No recommendations yet</h3>
-                <p>Start by adding your favorite places!</p>
-            </div>
-        </div>
-
-        <!-- Chat Section -->
-        <div id="chat-section" class="section">
-            <div class="chat-container">
-                <div class="chat-header">
-                    <h3>Ask about my recommendations</h3>
-                    <p style="color: #a1a1aa; font-size: 14px; margin-top: 5px;">
-                        Ask me where to go, what to eat, or any questions about my recommendations
-                    </p>
-                    <div class="share-link">
-                        <label style="font-size: 12px; color: #a1a1aa; margin-bottom: 5px; display: block;">Share this chat:</label>
-                        <input type="text" id="share-url" value="" readonly onclick="this.select()">
-                    </div>
-                </div>
-                <div id="chat-messages" class="chat-messages">
-                    <div class="message assistant">
-                        <div class="message-avatar">AI</div>
-                        <div class="message-content">
-                            Hi! I can help you find recommendations from this curated list. Ask me things like "Where should I go for dinner?" or "What's a good bar for cocktails?" 
-                        </div>
-                    </div>
-                </div>
-                <div class="chat-input-container">
-                    <div class="chat-input-wrapper">
-                        <textarea id="chat-input" class="chat-input" placeholder="Ask me for recommendations..." rows="1"></textarea>
-                        <button id="chat-send" class="chat-send-btn">Send</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+  </main>
 
-    <script>
-        // Point API calls to Render when running on GitHub Pages
-        (function(){
-            const RENDER_API = 'https://tulikajain-github-io.onrender.com'; // set your Render URL
-            const base = RENDER_API.replace(/\/$/, '');
-            const origFetch = window.fetch.bind(window);
-            window.fetch = (input, init) => {
-                try {
-                    let url = typeof input === 'string' ? input : (input && input.url) || '';
-                    // Only rewrite relative API calls
-                    if (typeof url === 'string' && url.startsWith('/api/')) {
-                        const absolute = base + url;
-                        console.debug('[api->render]', url, '=>', absolute);
-                        // If a Request object was passed, clone with absolute URL
-                        if (input instanceof Request) {
-                            const reqInit = {
-                                method: input.method,
-                                headers: input.headers,
-                                body: input.body,
-                                mode: input.mode,
-                                credentials: input.credentials,
-                                cache: input.cache,
-                                redirect: input.redirect,
-                                referrer: input.referrer,
-                                referrerPolicy: input.referrerPolicy,
-                                integrity: input.integrity,
-                                keepalive: input.keepalive,
-                                signal: input.signal
-                            };
-                            return origFetch(new Request(absolute, reqInit), init);
-                        }
-                        return origFetch(absolute, init);
-                    }
-                } catch (e) {
-                    console.warn('fetch rewrite error', e);
-                }
-                return origFetch(input, init);
-            };
-        })();
+  <!-- LIST MODAL -->
+  <div id="list-modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="list"></div>
+    <div class="modal-dialog">
+      <div class="modal-head">
+        <h3>My List <span id="rec-count" class="count-badge">0</span></h3>
+        <button class="modal-close" data-close="list" aria-label="Close list">&times;</button>
+      </div>
 
-        // Global state
-        let recommendations = [];
-        let currentFilter = 'all';
-        let selectedPlace = null;
-        let searchTimeout;
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="restaurant">Restaurants</button>
+        <button class="filter-btn" data-filter="bar">Bars</button>
+        <button class="filter-btn" data-filter="night_club">Clubs</button>
+        <button class="filter-btn" data-filter="cafe">Cafes</button>
+      </div>
 
-        // Initialize app
-        document.addEventListener('DOMContentLoaded', () => {
-            loadRecommendations();
-            generateShareUrl();
-        });
+      <div id="recommendations-container" class="recommendations-grid"></div>
 
-        // Navigation
-        function showSection(sectionName) {
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            document.getElementById(sectionName + '-section').classList.add('active');
-            event.target.classList.add('active');
-            
-            if (sectionName === 'list') {
-                renderRecommendations();
-            }
-        }
-
-        // Place search functionality (fire only on Enter)
-        function renderSearchResults(places) {
-            const resultsContainer = document.getElementById('search-results');
-            resultsContainer.innerHTML = places.map(place => {
-                const priceLevel = '💰'.repeat(place.price_level || 1);
-                const rating = place.rating ? `⭐ ${place.rating}` : '';
-                const category = place.types.includes('restaurant') ? 'restaurant' : 
-                                   place.types.includes('bar') ? 'bar' :
-                                   place.types.includes('night_club') ? 'night_club' :
-                                   place.types.includes('cafe') ? 'cafe' : 'restaurant';
-                return `
-                    <div class="search-result" onclick="selectPlace('${place.place_id}')">
-                        <div class="result-name">${place.name}</div>
-                        <div class="result-address">${place.formatted_address}</div>
-                        <div class="result-info">
-                            ${rating} ${priceLevel} 
-                            <span style=\"text-transform: capitalize;\">${category}</span>
-                            ${place.opening_hours?.open_now ? '<span style=\"color: #10b981;\">Open now</span>' : '<span style=\"color: #ef4444;\">Closed</span>'}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-            resultsContainer.style.display = places.length > 0 ? 'block' : 'none';
-        }
-
-        document.getElementById('place-search').addEventListener('keydown', async function(e) {
-            if (e.key !== 'Enter') return;
-            e.preventDefault();
-            const query = e.target.value.trim();
-            const resultsContainer = document.getElementById('search-results');
-            resultsContainer.style.display = 'none';
-            if (query.length < 2) return;
-            try {
-                const response = await fetch(`/api/search-places?query=${encodeURIComponent(query)}`);
-                const places = await response.json();
-                renderSearchResults(places);
-            } catch (error) {
-                console.error('Search error:', error);
-            }
-        });
-
-        async function selectPlace(placeId) {
-            try {
-                const response = await fetch(`/api/place-details/${placeId}`);
-                const details = await response.json();
-                
-                selectedPlace = {
-                    placeId: placeId,
-                    name: details.name,
-                    address: details.formatted_address,
-                    phone: details.formatted_phone_number,
-                    hours: details.opening_hours?.weekday_text?.join(', ') || 'Hours not available',
-                    priceLevel: details.price_level,
-                    rating: details.rating,
-                    website: details.website,
-                    types: details.types || []
-                };
-                
-                // Determine category
-                const category = details.types.includes('restaurant') ? 'restaurant' : 
-                               details.types.includes('bar') ? 'bar' :
-                               details.types.includes('night_club') ? 'night_club' :
-                               details.types.includes('cafe') ? 'cafe' : 'restaurant';
-                
-                selectedPlace.category = category;
-                
-                // Determine cuisine type
-                const cuisineTypes = details.types.filter(type => 
-                    !['restaurant', 'bar', 'night_club', 'cafe', 'food', 'establishment', 'point_of_interest'].includes(type)
-                );
-                selectedPlace.cuisine = cuisineTypes.length > 0 ? cuisineTypes[0].replace(/_/g, ' ') : '';
-                
-                // Show place preview
-                document.getElementById('place-preview').innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
-                        <div>
-                            <h5 style="margin-bottom: 5px;">${selectedPlace.name}</h5>
-                            <div style="font-size: 12px; color: #a1a1aa;">${selectedPlace.address}</div>
-                        </div>
-                        <div style="text-align: right; font-size: 12px;">
-                            ${selectedPlace.rating ? `⭐ ${selectedPlace.rating}` : ''}
-                            ${selectedPlace.priceLevel ? `<br>${'💰'.repeat(selectedPlace.priceLevel)}` : ''}
-                        </div>
-                    </div>
-                    <div style="font-size: 12px; color: #666;">
-                        <strong>Category:</strong> ${category} 
-                        ${selectedPlace.cuisine ? `| <strong>Type:</strong> ${selectedPlace.cuisine}` : ''}
-                    </div>
-                `;
-                
-                document.getElementById('selected-place').classList.add('show');
-                document.getElementById('add-form').style.display = 'block';
-                document.getElementById('search-results').style.display = 'none';
-                document.getElementById('place-search').value = selectedPlace.name;
-                
-            } catch (error) {
-                console.error('Error getting place details:', error);
-                alert('Error loading place details. Please try again.');
-            }
-        }
-
-        // Add form submission
-        document.getElementById('add-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            if (!selectedPlace) {
-                alert('Please select a place first');
-                return;
-            }
-            
-            const recommendation = {
-                name: selectedPlace.name,
-                category: selectedPlace.category,
-                cuisine: selectedPlace.cuisine,
-                location: selectedPlace.address,
-                priceRange: selectedPlace.priceLevel ? '$'.repeat(selectedPlace.priceLevel) : '',
-                hours: selectedPlace.hours,
-                phone: selectedPlace.phone,
-                website: selectedPlace.website,
-                rating: selectedPlace.rating,
-                comments: document.getElementById('comments').value.trim(),
-                placeId: selectedPlace.placeId
-            };
-            
-            try {
-                const response = await fetch('/api/recommendations', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(recommendation)
-                });
-                
-                if (response.ok) {
-                    const newRec = await response.json();
-                    recommendations.push(newRec);
-                    updateRecCount();
-                    
-                    // Reset form
-                    this.reset();
-                    document.getElementById('place-search').value = '';
-                    document.getElementById('selected-place').classList.remove('show');
-                    document.getElementById('add-form').style.display = 'none';
-                    selectedPlace = null;
-                    
-                    alert('Place added successfully!');
-                    
-                    // Switch to list view
-                    setTimeout(() => {
-                        document.querySelector('[onclick="showSection(\'list\')"]').click();
-                    }, 1000);
-                } else {
-                    throw new Error('Failed to add recommendation');
-                }
-            } catch (error) {
-                console.error('Error adding recommendation:', error);
-                alert('Error adding place. Please try again.');
-            }
-        });
-
-        // Load recommendations
-        async function loadRecommendations() {
-            try {
-                const response = await fetch('/api/recommendations');
-                recommendations = await response.json();
-                updateRecCount();
-                renderRecommendations();
-            } catch (error) {
-                console.error('Error loading recommendations:', error);
-            }
-        }
-
-        function updateRecCount() {
-            document.getElementById('rec-count').textContent = recommendations.length;
-        }
-
-        // Render recommendations
-        function renderRecommendations() {
-            const container = document.getElementById('recommendations-container');
-            const emptyState = document.getElementById('empty-state');
-            
-            const filteredRecs = currentFilter === 'all' 
-                ? recommendations 
-                : recommendations.filter(rec => rec.category === currentFilter);
-            
-            if (filteredRecs.length === 0) {
-                container.style.display = 'none';
-                emptyState.style.display = 'block';
-                return;
-            }
-            
-            container.style.display = 'grid';
-            emptyState.style.display = 'none';
-            
-            container.innerHTML = filteredRecs.map(rec => `
-                <div class="rec-card">
-                    <div class="rec-header">
-                        <div>
-                            <div class="rec-title">${rec.name}</div>
-                            ${rec.cuisine ? `<div style="color: #a1a1aa; font-size: 14px;">${rec.cuisine}</div>` : ''}
-                            ${rec.rating ? `<div class="rec-rating">⭐ ${rec.rating}</div>` : ''}
-                        </div>
-                        <div class="rec-category">${rec.category}</div>
-                    </div>
-                    
-                    <div class="rec-details">
-                        <div class="rec-detail">
-                            <strong>📍</strong> ${rec.location}
-                        </div>
-                        ${rec.priceRange ? `<div class="rec-detail"><strong>💰</strong> ${rec.priceRange}</div>` : ''}
-                        ${rec.phone ? `<div class="rec-detail"><strong>📞</strong> ${rec.phone}</div>` : ''}
-                        ${rec.hours ? `<div class="rec-detail"><strong>🕒</strong> ${rec.hours}</div>` : ''}
-                        ${rec.website ? `<div class="rec-detail"><strong>🌐</strong> <a href="${rec.website}" target="_blank" style="color: #667eea;">Website</a></div>` : ''}
-                    </div>
-                    
-                    ${rec.comments ? `<div class="rec-comments">${rec.comments}</div>` : ''}
-                    
-                    <div class="rec-actions">
-                        <button class="btn-small btn-danger" onclick="deleteRecommendation('${rec.id}')">Delete</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Filter functionality
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentFilter = this.dataset.filter;
-                renderRecommendations();
-            });
-        });
-
-        async function deleteRecommendation(id) {
-            if (confirm('Are you sure you want to delete this recommendation?')) {
-                try {
-                    const response = await fetch(`/api/recommendations/${id}`, {
-                        method: 'DELETE'
-                    });
-                    
-                    if (response.ok) {
-                        recommendations = recommendations.filter(rec => rec.id !== id);
-                        updateRecCount();
-                        renderRecommendations();
-                    } else {
-                        throw new Error('Failed to delete recommendation');
-                    }
-                } catch (error) {
-                    console.error('Error deleting recommendation:', error);
-                    alert('Error deleting recommendation. Please try again.');
-                }
-            }
-        }
-
-        // Chat functionality
-        const chatMessages = document.getElementById('chat-messages');
-        const chatInput = document.getElementById('chat-input');
-        const chatSend = document.getElementById('chat-send');
-
-        function addMessage(content, isUser = false) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isUser ? 'user' : 'assistant'}`;
-            messageDiv.innerHTML = `
-                <div class="message-avatar">${isUser ? 'You' : 'AI'}</div>
-                <div class="message-content">${content}</div>
-            `;
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        function addLoadingMessage() {
-            const loadingDiv = document.createElement('div');
-            loadingDiv.className = 'message assistant loading-message';
-            loadingDiv.innerHTML = `
-                <div class="message-avatar">AI</div>
-                <div class="message-content loading">
-                    <span>Thinking</span>
-                    <div class="loading-dots">
-                        <div class="loading-dot"></div>
-                        <div class="loading-dot"></div>
-                        <div class="loading-dot"></div>
-                    </div>
+      <div id="empty-state" class="empty-state">
+        <h3>No recommendations yet</h3>
+        <p>Start by adding your favorite places!</p>
+      </div>
+    </div>
   </div>
-            `;
-            chatMessages.appendChild(loadingDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            return loadingDiv;
-        }
 
-        async function handleChatMessage(message) {
-            const loadingMessage = addLoadingMessage();
-            
-            try {
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ message })
-                });
-                
-                const data = await response.json();
-                
-                loadingMessage.remove();
-                addMessage(data.response);
-            } catch (error) {
-                loadingMessage.remove();
-                addMessage('Sorry, I encountered an error. Please try again.');
-                console.error('Chat error:', error);
+  <!-- ADD MODAL -->
+  <div id="add-modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="add"></div>
+    <div class="modal-dialog">
+      <div class="modal-head">
+        <h3>Add New Place</h3>
+        <button class="modal-close" data-close="add" aria-label="Close add">&times;</button>
+      </div>
+
+      <div class="add-form" style="margin:0;">
+        <div class="form-group">
+          <label for="place-search">Search for a place</label>
+          <input type="text" id="place-search" class="form-control" placeholder="Start typing restaurant name..." required>
+          <div id="search-results" class="search-results"></div>
+        </div>
+
+        <div id="selected-place" class="selected-place">
+          <h4 style="margin-bottom:10px;">Selected Place:</h4>
+          <div id="place-preview"></div>
+        </div>
+
+        <form id="add-form" style="display:none;">
+          <div class="form-group">
+            <label for="comments">Your Comments & Recommendations</label>
+            <textarea id="comments" class="form-control" rows="4" placeholder="Dish tips, why you love it, best time to visit..."></textarea>
+          </div>
+          <button type="submit" class="btn" style="width:100%;">Add to My List</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ---------- API base rewrite (Render on GitHub Pages) ---------- */
+    (function(){
+      const RENDER_API = 'https://tulikajain-github-io.onrender.com';
+      const base = RENDER_API.replace(/\/$/,'');
+      const origFetch = window.fetch.bind(window);
+      window.fetch = (input, init) => {
+        try {
+          let url = typeof input === 'string' ? input : (input && input.url) || '';
+          if (typeof url === 'string' && url.startsWith('/api/')) {
+            const absolute = base + url;
+            if (input instanceof Request) {
+              const reqInit = {
+                method: input.method, headers: input.headers, body: input.body,
+                mode: input.mode, credentials: input.credentials, cache: input.cache,
+                redirect: input.redirect, referrer: input.referrer, referrerPolicy: input.referrerPolicy,
+                integrity: input.integrity, keepalive: input.keepalive, signal: input.signal
+              };
+              return origFetch(new Request(absolute, reqInit), init);
             }
-        }
+            return origFetch(absolute, init);
+          }
+        } catch(e){ console.warn('fetch rewrite error', e); }
+        return origFetch(input, init);
+      };
+    })();
 
-        function sendMessage() {
-            const message = chatInput.value.trim();
-            if (!message) return;
-            
-            addMessage(message, true);
-            chatInput.value = '';
-            chatInput.style.height = 'auto';
-            
-            handleChatMessage(message);
-        }
+    /* ---------- State ---------- */
+    let recommendations = [];
+    let currentFilter = 'all';
+    let selectedPlace = null;
 
-        chatSend.addEventListener('click', sendMessage);
-        chatInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
+    /* ---------- On load ---------- */
+    document.addEventListener('DOMContentLoaded', () => {
+      loadRecommendations();
+    });
+
+    /* ---------- Modal helpers ---------- */
+    const listModal = document.getElementById('list-modal');
+    const addModal  = document.getElementById('add-modal');
+
+    function openModal(which) {
+      const m = which === 'list' ? listModal : addModal;
+      m.setAttribute('aria-hidden','false');
+      m.classList.add('open');
+      // focus first input if add
+      if (which === 'add') setTimeout(() => document.getElementById('place-search')?.focus(), 50);
+    }
+    function closeModal(which) {
+      const m = which === 'list' ? listModal : addModal;
+      m.classList.remove('open');
+      m.setAttribute('aria-hidden','true');
+    }
+
+    document.getElementById('open-list').addEventListener('click', () => {
+      renderRecommendations();
+      openModal('list');
+    });
+    document.getElementById('open-add').addEventListener('click', () => openModal('add'));
+
+    document.querySelectorAll('[data-close]').forEach(btn => {
+      btn.addEventListener('click', (e) => closeModal(e.currentTarget.dataset.close));
+    });
+
+    /* Close on Esc */
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (addModal.classList.contains('open')) closeModal('add');
+        if (listModal.classList.contains('open')) closeModal('list');
+      }
+    });
+
+    /* ---------- LIST: load & render ---------- */
+    async function loadRecommendations() {
+      try {
+        const res = await fetch('/api/recommendations');
+        recommendations = await res.json();
+        updateRecCount();
+      } catch (err) {
+        console.error('Error loading recommendations:', err);
+      }
+    }
+    function updateRecCount() {
+      const el = document.getElementById('rec-count');
+      if (el) el.textContent = recommendations.length;
+    }
+
+    function renderRecommendations() {
+      const container = document.getElementById('recommendations-container');
+      const emptyState = document.getElementById('empty-state');
+      const filtered = currentFilter === 'all' ? recommendations : recommendations.filter(r => r.category === currentFilter);
+
+      if (!filtered.length) {
+        container.style.display = 'none';
+        emptyState.style.display = 'block';
+        return;
+      }
+      container.style.display = 'grid';
+      emptyState.style.display = 'none';
+      container.innerHTML = filtered.map(rec => `
+        <div class="rec-card">
+          <div class="rec-header">
+            <div>
+              <div class="rec-title">${rec.name}</div>
+              ${rec.cuisine ? `<div style="color:#a1a1aa;font-size:14px;">${rec.cuisine}</div>` : ''}
+              ${rec.rating ? `<div class="rec-rating">⭐ ${rec.rating}</div>` : ''}
+            </div>
+            <div class="rec-category">${rec.category}</div>
+          </div>
+          <div class="rec-details">
+            <div class="rec-detail"><strong>📍</strong> ${rec.location}</div>
+            ${rec.priceRange ? `<div class="rec-detail"><strong>💰</strong> ${rec.priceRange}</div>` : ''}
+            ${rec.phone ? `<div class="rec-detail"><strong>📞</strong> ${rec.phone}</div>` : ''}
+            ${rec.hours ? `<div class="rec-detail"><strong>🕒</strong> ${rec.hours}</div>` : ''}
+            ${rec.website ? `<div class="rec-detail"><strong>🌐</strong> <a href="${rec.website}" target="_blank" style="color:#667eea;">Website</a></div>` : ''}
+          </div>
+          ${rec.comments ? `<div class="rec-comments">${rec.comments}</div>` : ''}
+          <div class="rec-actions">
+            <button class="btn-small btn-danger" onclick="deleteRecommendation('${rec.id}')">Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      renderRecommendations();
+    });
+
+    async function deleteRecommendation(id) {
+      if (!confirm('Delete this recommendation?')) return;
+      try {
+        const res = await fetch(`/api/recommendations/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          recommendations = recommendations.filter(r => r.id !== id);
+          updateRecCount();
+          renderRecommendations();
+        } else throw new Error('Failed to delete');
+      } catch (err) {
+        console.error('Delete error:', err);
+        alert('Error deleting recommendation. Please try again.');
+      }
+    }
+    window.deleteRecommendation = deleteRecommendation;
+
+    /* ---------- ADD: search & save ---------- */
+    function renderSearchResults(places) {
+      const results = document.getElementById('search-results');
+      results.innerHTML = places.map(place => {
+        const priceLevel = '💰'.repeat(place.price_level || 1);
+        const rating = place.rating ? `⭐ ${place.rating}` : '';
+        const category = place.types.includes('restaurant') ? 'restaurant' :
+                         place.types.includes('bar') ? 'bar' :
+                         place.types.includes('night_club') ? 'night_club' :
+                         place.types.includes('cafe') ? 'cafe' : 'restaurant';
+        return `
+          <div class="search-result" onclick="selectPlace('${place.place_id}')">
+            <div class="result-name">${place.name}</div>
+            <div class="result-address">${place.formatted_address}</div>
+            <div class="result-info">
+              ${rating} ${priceLevel}
+              <span style="text-transform:capitalize;">${category}</span>
+              ${place.opening_hours?.open_now ? '<span style="color:#10b981;">Open now</span>' : '<span style="color:#ef4444;">Closed</span>'}
+            </div>
+          </div>
+        `;
+      }).join('');
+      results.style.display = places.length ? 'block' : 'none';
+    }
+
+    document.addEventListener('keydown', async (e) => {
+      if (e.target.id !== 'place-search' || e.key !== 'Enter') return;
+      e.preventDefault();
+      const query = e.target.value.trim();
+      document.getElementById('search-results').style.display = 'none';
+      if (query.length < 2) return;
+      try {
+        const res = await fetch(`/api/search-places?query=${encodeURIComponent(query)}`);
+        const places = await res.json();
+        renderSearchResults(places);
+      } catch (err) {
+        console.error('Search error:', err);
+      }
+    });
+
+    async function selectPlace(placeId) {
+      try {
+        const res = await fetch(`/api/place-details/${placeId}`);
+        const details = await res.json();
+
+        selectedPlace = {
+          placeId,
+          name: details.name,
+          address: details.formatted_address,
+          phone: details.formatted_phone_number,
+          hours: details.opening_hours?.weekday_text?.join(', ') || 'Hours not available',
+          priceLevel: details.price_level,
+          rating: details.rating,
+          website: details.website,
+          types: details.types || []
+        };
+
+        const category = details.types.includes('restaurant') ? 'restaurant' :
+                         details.types.includes('bar') ? 'bar' :
+                         details.types.includes('night_club') ? 'night_club' :
+                         details.types.includes('cafe') ? 'cafe' : 'restaurant';
+        selectedPlace.category = category;
+
+        const cuisineTypes = details.types.filter(t => !['restaurant','bar','night_club','cafe','food','establishment','point_of_interest'].includes(t));
+        selectedPlace.cuisine = cuisineTypes.length ? cuisineTypes[0].replace(/_/g,' ') : '';
+
+        document.getElementById('place-preview').innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px;">
+            <div>
+              <h5 style="margin-bottom:5px;">${selectedPlace.name}</h5>
+              <div style="font-size:12px;color:#a1a1aa;">${selectedPlace.address}</div>
+            </div>
+            <div style="text-align:right;font-size:12px;">
+              ${selectedPlace.rating ? `⭐ ${selectedPlace.rating}` : ''}
+              ${selectedPlace.priceLevel ? `<br>${'💰'.repeat(selectedPlace.priceLevel)}` : ''}
+            </div>
+          </div>
+          <div style="font-size:12px;color:#666;">
+            <strong>Category:</strong> ${category}
+            ${selectedPlace.cuisine ? ` | <strong>Type:</strong> ${selectedPlace.cuisine}` : ''}
+          </div>
+        `;
+        document.getElementById('selected-place').classList.add('show');
+        document.getElementById('add-form').style.display = 'block';
+        document.getElementById('search-results').style.display = 'none';
+        document.getElementById('place-search').value = selectedPlace.name;
+      } catch (err) {
+        console.error('Details error:', err);
+        alert('Error loading place details. Please try again.');
+      }
+    }
+    window.selectPlace = selectPlace;
+
+    document.getElementById('add-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!selectedPlace) return alert('Please select a place first');
+
+      const recommendation = {
+        name: selectedPlace.name,
+        category: selectedPlace.category,
+        cuisine: selectedPlace.cuisine,
+        location: selectedPlace.address,
+        priceRange: selectedPlace.priceLevel ? '$'.repeat(selectedPlace.priceLevel) : '',
+        hours: selectedPlace.hours,
+        phone: selectedPlace.phone,
+        website: selectedPlace.website,
+        rating: selectedPlace.rating,
+        comments: document.getElementById('comments').value.trim(),
+        placeId: selectedPlace.placeId
+      };
+
+      try {
+        const res = await fetch('/api/recommendations', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(recommendation)
         });
+        if (!res.ok) throw new Error('Failed to add');
+        const newRec = await res.json();
+        recommendations.push(newRec);
+        updateRecCount();
 
-        // Auto-resize chat input
-        chatInput.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        // reset form
+        e.target.reset();
+        document.getElementById('place-search').value = '';
+        document.getElementById('selected-place').classList.remove('show');
+        document.getElementById('add-form').style.display = 'none';
+        selectedPlace = null;
+
+        alert('Place added!');
+        closeModal('add');
+        openModal('list');
+        renderRecommendations();
+      } catch (err) {
+        console.error('Add error:', err);
+        alert('Error adding place. Please try again.');
+      }
+    });
+
+    /* ---------- Chat ---------- */
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInput    = document.getElementById('chat-input');
+    const chatSend     = document.getElementById('chat-send');
+
+    function addMessage(content, isUser=false) {
+      const wrap = document.createElement('div');
+      wrap.className = `message ${isUser ? 'user' : 'assistant'}`;
+      wrap.innerHTML = `
+        <div class="message-avatar">${isUser ? 'Me' : 'AI'}</div>
+        <div class="message-content">${content}</div>
+      `;
+      chatMessages.appendChild(wrap);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function addLoadingMessage() {
+      const d = document.createElement('div');
+      d.className = 'message assistant loading-message';
+      d.innerHTML = `
+        <div class="message-avatar">AI</div>
+        <div class="message-content loading">
+          <span>Thinking</span>
+          <div class="loading-dots">
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+          </div>
+        </div>`;
+      chatMessages.appendChild(d);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      return d;
+    }
+
+    async function handleChatMessage(message) {
+      const loading = addLoadingMessage();
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ message })
         });
+        const data = await res.json();
+        loading.remove();
+        addMessage(data.response);
+      } catch (err) {
+        loading.remove();
+        addMessage('Sorry, I encountered an error. Please try again.');
+        console.error('Chat error:', err);
+      }
+    }
 
-        // Generate share URL
-        function generateShareUrl() {
-            const shareId = Math.random().toString(36).substr(2, 9);
-            const url = `${window.location.origin}/chat/share/${shareId}`;
-            document.getElementById('share-url').value = url;
-        }
+    function sendMessage() {
+      const msg = chatInput.value.trim();
+      if (!msg) return;
+      addMessage(msg, true);
+      chatInput.value = '';
+      chatInput.style.height = 'auto';
+      handleChatMessage(msg);
+    }
 
-        // Hide search results when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('#place-search') && !e.target.closest('#search-results')) {
-                document.getElementById('search-results').style.display = 'none';
-            }
-        });
-    </script>
+    chatSend.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+    chatInput.addEventListener('input', function(){
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+    });
+
+    /* Hide search results when clicking outside (add modal) */
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('#place-search') && !e.target.closest('#search-results')) {
+        const el = document.getElementById('search-results');
+        if (el) el.style.display = 'none';
+      }
+    });
+  </script>
 </body>
 </html>
